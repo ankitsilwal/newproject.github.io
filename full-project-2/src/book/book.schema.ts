@@ -1,31 +1,38 @@
-import * as mongoose from "mongoose";
+import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import mongoose, { Document } from "mongoose";
 
-export const BookSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+@Schema({
+  timestamps: true,
+  toJSON: {
+    transform: function (doc, ret, options) {
+      ret.id = ret._id;
+      delete ret._id;
+      return ret;
+    },
   },
-  author: {
-    type: String,
-    required: true,
+  toObject: {
+    transform: function (doc, ret, options) {
+      ret.id = ret._id;
+      delete ret._id;
+      return ret;
+    },
   },
-  description: {
-    type: String,
-  },
+  versionKey: false,
+})
+export class Book extends Document {
+  id: mongoose.Types.ObjectId;
 
-  publicationDate: {
-    type: Date,
-  },
-
-  genre: {
-    type: String,
-  },
-});
-
-export interface Book extends mongoose.Document {
+  @Prop({})
   title: string;
-  author: string;
-  description?: string;
-  publicationDate: Date;
+
+  @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
+  author: mongoose.Types.ObjectId;
+
+  @Prop({})
+  description: string;
+
+  @Prop({})
   genre: string;
 }
+
+export const BookSchema = SchemaFactory.createForClass(Book);

@@ -5,7 +5,6 @@ import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
-import { UsersController } from './users/user.controller';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
 import { BookModule } from './book/book.module';
@@ -21,10 +20,9 @@ import { BookModule } from './book/book.module';
       limit :2,
     }]),
 
-    BookModule
+    BookModule,
   ],
 
-  controllers:[UsersController],
   providers: [
     {
       provide : APP_GUARD,

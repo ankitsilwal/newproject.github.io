@@ -1,24 +1,19 @@
+import mongoose from "mongoose";
+
 export class Book {
-  id: string;
   title: string;
-  author: string;
-  publicationDate: Date;
+  author: mongoose.Types.ObjectId;
   genre: string;
   description: string;
 
   constructor(
-    id: string,
     title: string,
-    author: string,
-    publicationDate: Date,
+    author: mongoose.Types.ObjectId,
     genre: string,
     description: string
-    
   ) {
-    this.id = id;
     this.title = title;
     this.author = author;
-    this.publicationDate = publicationDate;
     this.genre = genre;
     this.description = description;
   }
