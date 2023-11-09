@@ -1,5 +1,5 @@
 import { Schema ,Prop, SchemaFactory} from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 @Schema({
     timestamps: true,
   toJSON: {
@@ -21,13 +21,14 @@ import { Document } from "mongoose";
 })
 
 export class User extends Document {
-    @Prop({})
-    id : number;
+    id : mongoose.Types.ObjectId
 
     @Prop({})
     username : string;
 
-    @Prop({})
+    @Prop({
+      required:true
+    })
     password : string;
 
     @Prop({})

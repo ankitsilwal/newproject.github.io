@@ -5,6 +5,7 @@ import { User } from "./user.schema";
 import { CreateUSerDto } from "./user.dto";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { UpdateUserDto } from "./updatedto";
 
 @Injectable()
 export class UserService {
@@ -20,20 +21,18 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = 
-      await this.userModel.create({
-        username,
-        password: hashedPassword,
-        role,
-      })
-      const userWithoutPassword = user.toObject();
-      delete userWithoutPassword.password;
-  
+    const user = await this.userModel.create({
+      username,
+      password: hashedPassword,
+      role,
+    });
+    const userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
 
     const payload = { sub: user.id, username: user.username, role: user.role };
     const accessToken = this.jwtService.sign(payload);
 
-    return { user:userWithoutPassword, accessToken };
+    return { user: userWithoutPassword, accessToken };
   }
 
   getUserByAccessToken(token: string): Promise<User> {
@@ -63,4 +62,27 @@ export class UserService {
     return users;
   }
 
+
+  async updateuser(userid:mongoose.Types.ObjectId, updateUserDto:UpdateUserDto): Promise<User> {
+    const existingUser =await this.userModel.findByIdAndUpdate(userid,updateUserDto,{new:true});
+    if(!existingUser){
+      throw new NotFoundException(`User ${userid} not found`);
+    }
+    return existingUser
+  }
+
+
+
+
+
+  async deleteuser(userid:mongoose.Types.ObjectId):Promise<User>{
+    const deleteUser = await this.userModel.findByIdAndDelete(userid);
+    if(!deleteUser){
+      throw new NotFoundException(`Student ${userid} not found`)
+    }
+    return deleteUser;
+  }  
 }
+
+
+

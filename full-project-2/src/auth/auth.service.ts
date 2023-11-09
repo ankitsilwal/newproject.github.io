@@ -22,7 +22,9 @@ export class AuthService {
     }
 
     const payload = { sub: user.id, role: user.role };
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      secret: `${process.env.JWT_SECRET}`,
+    });
 
     return { accessToken };
   }
